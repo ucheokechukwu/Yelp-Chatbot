@@ -17,7 +17,8 @@ neo4j_vector_index = Neo4jVector.from_existing_graph(
     password=os.getenv("NEO4J_PASSWORD"),
     index_name="reviews",
     node_label="Review",
-    text_node_properties=["text", "stars", "date"],
+    text_node_properties=["text", "stars", "date", 
+                        'business_name', 'business_state', 'business_categories'],
     embedding_node_property="embedding"
 )
 
