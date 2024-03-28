@@ -1,8 +1,5 @@
 # https://nominatim.org/release-docs/develop/api/Search/#geocodejson
-
-
 # https://project-osrm.org/docs/v5.24.0/api/?language=python#table-service
-# "https://routing.openstreetmap.de/routed-foot/route/v1/"
 
 import requests
 
@@ -38,3 +35,11 @@ def get_triptime(start_lon_lat,
             duration = max(data['durations'][0])
             return duration
     return None
+    
+
+
+# Get geolocation of start and locations
+start_lon_lat = get_geolocation(start_location)
+end_lon_lat = get_geolocation(end_location)
+
+duration = get_triptime(start_lon_lat, end_lon_lat)
