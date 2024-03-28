@@ -1,3 +1,4 @@
+
 # https://nominatim.org/release-docs/develop/api/Search/#geocodejson
 # https://project-osrm.org/docs/v5.24.0/api/?language=python#table-service
 
@@ -9,8 +10,14 @@ headers = {
     'Content-Type':"text"
 }
 
-def get_geolocation(address):
-    print(address)
+def secs_to_hr_min(duration: float) -> str:
+    hrs = int(duration/3600)
+    res = duration%3600
+    mins = int(res/60)
+    secs = int(res%60) if not (mins or hrs) else None
+    return (f"{hrs} h " if hrs else " ") + (f"{mins} m " if mins else " ") + (f"{secs} s " if secs else " ")
+
+def get_geolocation(address: str) -> (float, float):
     url = f"https://nominatim.openstreetmap.org/search?q={address}&format=geojson"
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
@@ -20,7 +27,7 @@ def get_geolocation(address):
                 lon, lat = data['features'][0]['geometry']['coordinates']
                 return lon, lat
     return None
-    
+
 def get_triptime(start_lon_lat, 
                  end_lon_lat,
                 profile = "driving"):
@@ -35,7 +42,7 @@ def get_triptime(start_lon_lat,
             duration = max(data['durations'][0])
             return duration
     return None
-    
+
 def main(start_location, end_location):
 
     # Get geolocation of start and locations
@@ -44,4 +51,4 @@ def main(start_location, end_location):
 
     duration = get_triptime(start_lon_lat, end_lon_lat)
     trip_time = secs_to_hr_min(duration) if duration else None
-    return duration
+    return duration, trip_time
