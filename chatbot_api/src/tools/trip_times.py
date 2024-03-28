@@ -2,7 +2,9 @@ import os
 from typing import Any
 import numpy as np
 from langchain_community.graphs import Neo4jGraph
-from pandas import Series
+import pandas as pd
+from chatbot_api.src.tools import geolocator
+
 
 def _get_current_businesses() -> list[str]:
     """Fetch a list of current business names from a Neo4j database."""
@@ -23,12 +25,18 @@ def _get_current_businesses() -> list[str]:
         """
     )
     
-    return current_businesses
+    return pd.DataFrame(current_businesses)
     
 def get_trip_time(start_location: str, business: str) -> (float, str):
-    pass
-    return None # placeholder for trip_time in seconds
+    """Get the current trip time to businesses from a given location in seconds."""
     
-def get_nearest_business(start_location: str, current_businesses: Series) -> dict[str, float]:
+    current_businesses = _get_current_businesses()
+    b = current_businesses[current_businesses.name==business].iloc[0]
+
+    business_location = ' '.join([b['address'], b['city'], b['state'], b['postal_code']])                
+    return geodistance.main(start_location=start_location,
+                            end_location=business_location)
+    
+def get_nearest_business(start_location: str, current_businesses: pd.Series) -> dict[str, float]:
     pass
     return None # placeholder for dictionary of business_name, trip_time

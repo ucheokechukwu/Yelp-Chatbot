@@ -36,10 +36,12 @@ def get_triptime(start_lon_lat,
             return duration
     return None
     
+def main(start_location, end_location):
 
+    # Get geolocation of start and locations
+    start_lon_lat = get_geolocation(start_location)
+    end_lon_lat = get_geolocation(end_location)
 
-# Get geolocation of start and locations
-start_lon_lat = get_geolocation(start_location)
-end_lon_lat = get_geolocation(end_location)
-
-duration = get_triptime(start_lon_lat, end_lon_lat)
+    duration = get_triptime(start_lon_lat, end_lon_lat)
+    trip_time = secs_to_hr_min(duration) if duration else None
+    return duration
