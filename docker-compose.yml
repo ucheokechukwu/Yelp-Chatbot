@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  yelp_chatbot:
+    build:
+      context: ./neo4j_etl
+    env_file:
+      - .env            
