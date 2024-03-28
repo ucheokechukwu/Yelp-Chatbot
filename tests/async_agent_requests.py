@@ -1,6 +1,7 @@
 import asyncio
 import time
 import httpx
+import json
 
 CHATBOT_URL = "http://localhost:8000/yelp-agent"
 
@@ -13,6 +14,16 @@ async def make_bulk_requests(url, data):
     tasks = [make_async_post(url, payload) for payload in data]
     responses = await asyncio.gather(*tasks)
     outputs = [r.json()["output"] for r in responses]
+    # outputs = []
+    # for r in responses:
+    #     if r.content:
+    #         try:
+    #             output = r.json()["output"]
+    #             outputs.append(output)
+    #         except Exception as e:
+    #             print(str(e))
+    #     else:
+    #         print("Empty response content")
     return outputs
     
 questions=[
