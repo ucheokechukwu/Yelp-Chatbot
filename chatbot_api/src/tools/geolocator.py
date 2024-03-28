@@ -27,7 +27,9 @@ def get_geolocation(address):
 def get_triptime(start_lon_lat, 
                  end_lon_lat,
                 profile = "driving"):
-
+    if start_lon_lat is None or  end_lon_lat is None:
+        return None
+    # alternative_url_endpoint="https://routing.openstreetmap.de/routed-foot/route/v1/"
     url = f"http://router.project-osrm.org/table/v1/{profile}/{start_lon_lat[0]},{start_lon_lat[-1]};{end_lon_lat[0]},{end_lon_lat[-1]}"
     response = requests.get(url, headers=headers)
     if response.status_code ==200:
