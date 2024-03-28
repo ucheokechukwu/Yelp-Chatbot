@@ -3,7 +3,8 @@ from typing import Any
 import numpy as np
 from langchain_community.graphs import Neo4jGraph
 import pandas as pd
-from chatbot_api.src.tools import geodistance
+
+from tools import geodistance
 
 def _get_current_businesses() -> list[str]:
     """Fetch a list of current business names from a Neo4j database."""

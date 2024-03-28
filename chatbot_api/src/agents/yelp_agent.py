@@ -5,7 +5,7 @@ from langchain.agents import (
     Tool,
     AgentExecutor,)
     
-# from tools.trip_times import get_trip_time, get_nearest_business
+from tools.trip_times import get_trip_time, get_nearest_business
 from chains.yelp_review_chain import reviews_vector_chain
 from chains.yelp_cypher_chain import yelp_cypher_chain
 
@@ -27,7 +27,7 @@ tools = [
     ),
     Tool(
         name="Graph",
-        func=yelp_cyper_chain.invoke,
+        func=yelp_cypher_chain.invoke,
         description="""Useful for answering objective or questions that involve counting, percentages, aggregations, or listing facts. 
         Useful for answering questions about users and business details including business categories, locations, business average rating, 
         user review count, time-based information, and quantitative details. 
@@ -50,11 +50,11 @@ tools = [
     #
     #     # What is the trip time between Magnolia Barber Shop and 290 Central St, Lowell, MA 01852
     #
-    #     start_location:"290 Central St, Lowell, MA 01852", business="Magnolia Barber Shop"
+    #     business="Magnolia Barber Shop", start_location:"290 Central St, Lowell, MA 01852",
     #
     #     # How long to go from 185 Woburn St.In Exxon Gas Station to Dunkin Donuts Austin?
     #
-    #     start_location: "185 Woburn St.In Exxon Gas Station", business="Dunkin Donuts Austin"
+    #     business="Dunkin Donuts Austin", start_location: "185 Woburn St.In Exxon Gas Station",
     #     """
     # ),
     # Tool(name="NearestBusiness"),
@@ -64,13 +64,13 @@ tools = [
     # ),
 ]
 chat_model = ChatOpenAI(model=YELP_AGENT_MODEL, temperature=0)
-yelp_rag_agent = create_openai_functions_agent(
+yelp_agent = create_openai_functions_agent(
     llm=chat_model,
-    prompt=yelp_rag_agent,
+    prompt=yelp_agent_prompt,
     tools=tools)
     
-yelp_agent_rag_executor = AgentExecutor(
-    agent=yelp_rag_agent,
+yelp_agent_executor = AgentExecutor(
+    agent=yelp_agent,
     tools=tools,
     return_intermediate_steps=True,
     verbose=True,
