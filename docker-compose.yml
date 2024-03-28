@@ -1,8 +1,18 @@
 version: '3'
 
 services:
-  yelp_chatbot:
+  neo4j_etl:
     build:
       context: ./neo4j_etl
     env_file:
-      - .env            
+      - .env  
+
+  chatbot_api:
+    build:
+      context: ./chatbot_api
+    env_file:
+      - .env  
+    depends_on:
+      - neo4j_etl  
+    ports:
+      - "8000:8000"  
