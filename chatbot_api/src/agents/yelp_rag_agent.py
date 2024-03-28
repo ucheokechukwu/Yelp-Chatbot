@@ -5,11 +5,73 @@ from langchain.agents import (
     Tool,
     AgentExecutor,)
     
-from tools.trip_times import get_trip_time, get_nearest_business
-# from chains.yelp_review_chain import reviews_vector_chain
-# from chains.yelp_cypher_chain import yelp_cypher_chain
+# from tools.trip_times import get_trip_time, get_nearest_business
+from chains.yelp_review_chain import reviews_vector_chain
+from chains.yelp_cypher_chain import yelp_cypher_chain
 
 YELP_AGENT_MODEL = os.getenv("YELP_AGENT_MODEL")
 
 from langchain import hub
-prompt = hub.pull("hwchase17/openai-functions-agent")
+yelp_agent_prompt = hub.pull("hwchase17/openai-functions-agent")
+
+
+tools = [
+    Tool(
+        name="Experience",
+        func=reviews_vector_chain.invoke,
+        description="""Useful when you need to answer questions about user experiences, feelings, preferences, tips, or any other qualitative
+        question that could be answered about a business using semantic search. Not useful for answering objective questions that involve 
+        counting, percentages, aggregations, or listing facts. Use the entire prompt as input into the tool. For instance, if the prompt is 
+        "Do users prefer outdoor to indoor eating?" the input should be "Do users prefer outdoor to indoor eating?"
+        """
+    ),
+    Tool(
+        name="Graph",
+        func=yelp_cyper_chain.invoke,
+        description="""Useful for answering objective or questions that involve counting, percentages, aggregations, or listing facts. 
+        Useful for answering questions about users and business details including business categories, locations, business average rating, 
+        user review count, time-based information, and quantitative details. 
+        Use the entire prompt as input to the tool. For instance, if the prompt is "How many department stores are open in Texas?", 
+        the input should be "How many department stores are open in Texas?"
+        """
+    ),
+    # Tool(
+    #     name="TripTimes",
+    #     func=get_trip_time,
+    #     description="""Use when asked about the time to travel from a location to a specific business. This tool can only get the current trip time
+    #     to the business and does not have any information about aggregate or historical trip times.
+    #     Pass these 2 values as input: 'start_location' and 'business'.
+    #     'Starting location' is specified in the prompt as an address.
+    #     Do not pass the word 'business' as input, only the business name itself.For example if the prompt is 'What is the current wait time at Magnolia Barber Shop, the input should be
+    #     'Magnolia Barber Shop'.
+    #     This tool returns a list with the wait time in seconds, then as a string expression.
+    #
+    #     Examples:
+    #
+    #     # What is the trip time between Magnolia Barber Shop and 290 Central St, Lowell, MA 01852
+    #
+    #     start_location:"290 Central St, Lowell, MA 01852", business="Magnolia Barber Shop"
+    #
+    #     # How long to go from 185 Woburn St.In Exxon Gas Station to Dunkin Donuts Austin?
+    #
+    #     start_location: "185 Woburn St.In Exxon Gas Station", business="Dunkin Donuts Austin"
+    #     """
+    # ),
+    # Tool(name="NearestBusiness"),
+    #     func=get_nearest_business,
+    #     description="""Use when you need to find which business has the shortest trip time. This tool ddoes not have any information about
+    #     aggregate or historical trip times. This tool returns a dictionary with the business name as key, and the wait time as a string value."""
+    # ),
+]
+chat_model = ChatOpenAI(model=YELP_AGENT_MODEL, temperature=0)
+yelp_rag_agent = create_openai_functions_agent(
+    llm=chat_model,
+    prompt=yelp_rag_agent,
+    tools=tools)
+    
+yelp_agent_rag_executor = AgentExecutor(
+    agent=yelp_rag_agent,
+    tools=tools,
+    return_intermediate_steps=True,
+    verbose=True,
+)
