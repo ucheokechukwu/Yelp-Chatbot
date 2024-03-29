@@ -8,6 +8,7 @@ from langchain.agents import (
 from tools.trip_times import get_trip_time, get_nearest_business
 from chains.yelp_review_chain import reviews_vector_chain
 from chains.yelp_cypher_chain import yelp_cypher_chain
+from chains.yelp_triptime_chain import yelp_triptime_chain_invoke
 
 YELP_AGENT_MODEL = os.getenv("YELP_AGENT_MODEL")
 
@@ -35,28 +36,20 @@ tools = [
         the input should be "How many department stores are open in Texas?"
         """
     ),
-    # Tool(
-    #     name="TripTimes",
-    #     func=get_trip_time,
-    #     description="""Use when asked about the time to travel from a location to a specific business. This tool can only get the current trip time
-    #     to the business and does not have any information about aggregate or historical trip times.
-    #     Pass these 2 values as input: 'start_location' and 'business'.
-    #     'Starting location' is specified in the prompt as an address.
-    #     Do not pass the word 'business' as input, only the business name itself.For example if the prompt is 'What is the current wait time at Magnolia Barber Shop, the input should be
-    #     'Magnolia Barber Shop'.
-    #     This tool returns a list with the wait time in seconds, then as a string expression.
-    #
-    #     Examples:
-    #
-    #     # What is the trip time between Magnolia Barber Shop and 290 Central St, Lowell, MA 01852
-    #
-    #     business="Magnolia Barber Shop", start_location:"290 Central St, Lowell, MA 01852",
-    #
-    #     # How long to go from 185 Woburn St.In Exxon Gas Station to Dunkin Donuts Austin?
-    #
-    #     business="Dunkin Donuts Austin", start_location: "185 Woburn St.In Exxon Gas Station",
-    #     """
-    # ),
+    Tool(
+        name="TripTimes",
+        func=yelp_triptime_chain_invoke,
+        description="""Useful when asked about travel time from a specified location to a specific business. Prompts might include time-based phrases
+        like 'how quickly', 'how fast', 'how soon', 'trip time', etc. 
+        The prompt must have at least one full location address. Not useful for answering questions where one location address is not specified.
+        This tool can only get the current trip time to the business and does not have any information about aggregate or historical trip times.
+        Use the entire prompt as input to the tool. For instance, if the prompt is 
+        "What is the trip time between Magnolia Barber Shop and 290 Central St, Lowell, MA 01852", 
+        the input should be "What is the trip time between Magnolia Barber Shop and 290 Central St, Lowell, MA 01852"
+        """
+    ),
+    
+    
     # Tool(name="NearestBusiness"),
     #     func=get_nearest_business,
     #     description="""Use when you need to find which business has the shortest trip time. This tool ddoes not have any information about
