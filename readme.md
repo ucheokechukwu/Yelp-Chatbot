@@ -1,5 +1,8 @@
 ##YelpBot
 
+## Deployed @ [Yelp Chatbot on Streamlit](https://yelp-chatbot.streamlit.app/)
+* Repo for deployment [here](https://github.com/ucheokechukwu/Yelp-Chatbot---Streamlit-Deployment-Version)
+
 ![Screenshot](images/Screenshot.png)
 
 This chatbot interfaces with a [LangChain](https://python.langchain.com/docs/get_started/introduction) agent designed to answer questions about a subset of users, businesses, and reviews on [Yelp](https://www.yelp.com/). 
@@ -7,6 +10,7 @@ The agent uses retrieval-augment generation (RAG) over both structured and unstr
 Dataset provided by [Yelp](https://www.yelp.com/dataset).
 
 ### Credits
+
 * Yelp Dataset provided by [Yelp Open Dataset](https://www.yelp.com/dataset).
 * Geomapping and distance calculations based on the API tools provided by [Nominatim Project](https://nominatim.org/) and [Project OSRM](https://project-osrm.org/). 
 
@@ -14,6 +18,6 @@ Dataset provided by [Yelp](https://www.yelp.com/dataset).
 ### To Do
 1. `yelp_bulk_csv_write.py`: Fix issues with specifying data types that are affecting aggregation queries.
 2. ~~`yelp_agent.py`: Complete `TripTimes` Tool integration.~~ ✅ 29.03.2024
-3. Deploy on streamlit community cloud.
+3. ~~Deploy on streamlit community cloud.~~ ✅ 30.03.2024
 5. Scale up (< 10% total data currently deployed due to github file size limitations.)  Goal: Full Yelp datasets, inclduing `tips.csv`.
 6. Add Memory i.e. making the YelpBot a conversational bot.
