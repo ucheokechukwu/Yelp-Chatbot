@@ -1,6 +1,6 @@
-##YelpBot
+# YelpBot
 
-## Deployed @ [Yelp Chatbot on Streamlit](https://yelp-chatbot.streamlit.app/)
+### Deployed @ [Yelp Chatbot on Streamlit](https://yelp-chatbot.streamlit.app/)
 * Repo for deployment [here](https://github.com/ucheokechukwu/Yelp-Chatbot---Streamlit-Deployment-Version)
 
 ![Screenshot](images/Screenshot.png)
